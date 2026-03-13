@@ -1,0 +1,1490 @@
+<html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyMaster Pro - Plataforma Inteligente de Estudos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .container-main {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu-item {
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .menu-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--text-primary);
+        }
+
+        .menu-item.active {
+            background: rgba(99, 102, 241, 0.2);
+            border-left-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--dark-bg);
+        }
+
+        .header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(139, 92, 246, 0.3);
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        /* Dashboard View */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stats-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .stats-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .stats-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stats-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .stats-detail {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Subjects Section */
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .subject-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .subject-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .subject-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subject-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .subject-progress {
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .subject-body {
+            padding: 20px;
+        }
+
+        .subject-topics {
+            margin-top: 15px;
+        }
+
+        .topic-item {
+            padding: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topic-item:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .topic-status {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Performance Analysis */
+        .performance-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .strengths-weaknesses {
+            display: grid;
+            gap: 15px;
+        }
+
+        .strength-item {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .weakness-item {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--danger);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        /* Study Session */
+        .study-session {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .study-session.active {
+            display: block;
+        }
+
+        .timer-display {
+            font-size: 64px;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .current-topic {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        .session-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Performance Input */
+        .performance-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Quiz Input */
+        .quiz-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-item {
+            background: rgba(99, 102, 241, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .quiz-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .quiz-question {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .quiz-inputs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .quiz-inputs input {
+            flex: 1;
+            padding: 8px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-primary);
+        }
+
+        .btn-remove {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-remove:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Schedule */
+        .schedule-grid {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 40px;
+        }
+
+        .schedule-day {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .schedule-day-title {
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+
+        .schedule-time {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        .hidden-topics {
+            display: none;
+        }
+
+        .hidden-topics.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .performance-section {
+                grid-template-columns: 1fr;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-main">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">📚 StudyMaster</div>
+            <div class="sidebar-menu">
+                <div class="menu-item active" data-view="dashboard">📊 Dashboard</div>
+                <div class="menu-item" data-view="subjects">📖 Disciplinas</div>
+                <div class="menu-item" data-view="study">⏱️ Estudo</div>
+                <div class="menu-item" data-view="performance">📈 Rendimento</div>
+                <div class="menu-item" data-view="review">🔄 Revisão</div>
+                <div class="menu-item" data-view="schedule">📅 Planejamento</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-title" id="pageTitle">Dashboard</div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="btnAddSubject">+ Adicionar Disciplina</button>
+                    <button class="btn btn-primary" id="btnStartStudy">Iniciar Estudo</button>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Dashboard View -->
+                <div id="view-dashboard" class="view active">
+                    <div class="dashboard">
+                        <div class="stats-card">
+                            <div class="stats-label">Disciplinas Cadastradas</div>
+                            <div class="stats-value" id="totalSubjects">0</div>
+                            <div class="stats-detail">Total no currículo</div>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stats-label">Taxa de Acerto</div>
+                            <div class="stats-value" id="accuracyRate">0%</div>
+                            <div class="stats-detail">Último teste</div>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stats-label">Horas de Estudo</div>
+                            <div class="stats-value" id="studyHours">6h</div>
+                            <div class="stats-detail">Esta semana</div>
+                        </div>
+                        <div class="stats-card">
+                            <div class="stats-label">Progresso Geral</div>
+                            <div class="stats-value" id="overallProgress">0%</div>
+                            <div class="stats-detail">Do currículo</div>
+                        </div>
+                    </div>
+
+                    <div class="section-title">
+                        <div>Próximas Sessões de Estudo</div>
+                    </div>
+                    <div class="schedule-grid" id="nextSessionsContainer"><div style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhuma sessão prevista para hoje</div></div>
+
+                    <div class="section-title">Desempenho por Disciplina</div>
+                    <div class="performance-section">
+                        <div class="chart-card">
+                            <div class="chart-title">📊 Análise de Força e Fraqueza</div>
+                            <div id="strengthsWeaknesses" class="strengths-weaknesses"><div style="text-align: center; color: var(--text-muted); font-size: 13px;">Realize avaliações para análise detalhada</div></div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-title">🎯 Dicas Inteligentes</div>
+                            <div style="font-size: 13px; line-height: 1.6; color: var(--text-secondary);">
+                                <p style="margin-bottom: 12px;"><strong>✓ Use Pomodoro:</strong> 25min estudo + 5min pausa</p>
+                                <p style="margin-bottom: 12px;"><strong>✓ Repetição Espaçada:</strong> Revise em 1, 3, 7, 15 dias</p>
+                                <p><strong>✓ Alternância:</strong> Mude entre disciplinas a cada 2h</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subjects View -->
+                <div id="view-subjects" class="view hidden">
+                    <div class="section-title">
+                        Disciplinas Cadastradas
+                    </div>
+                    <div class="subjects-grid" id="subjectsContainer"><div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px;">Nenhuma disciplina cadastrada. Comece adicionando uma!</div></div>
+                </div>
+
+                <!-- Study View -->
+                <div id="view-study" class="view hidden">
+                    <div style="max-width: 600px; margin: 0 auto;">
+                        <div class="study-session" id="studySession">
+                            <div style="font-size: 14px; color: var(--text-muted);">Sessão de Estudo - Ciclo de Meireles</div>
+                            <div class="current-topic" id="currentTopicDisplay"></div>
+                            <div class="timer-display" id="timerDisplay">25:00</div>
+                            <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">Baseado em neurociência - Ciclos progressivos de aprendizado</div>
+                            <div class="session-controls">
+                                <button class="btn btn-primary" id="btnStartTimer">Iniciar</button>
+                                <button class="btn btn-secondary" id="btnPauseTimer">Pausar</button>
+                                <button class="btn btn-secondary" id="btnResetTimer">Reiniciar</button>
+                                <button class="btn btn-secondary" id="btnNextSession">Próximo Tópico</button>
+                            </div>
+                        </div>
+                        <div style="text-align: center; color: var(--text-muted); padding: 40px;" id="noStudyMessage">
+                            Selecione um tópico para iniciar a sessão de estudo
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance View -->
+                <div id="view-performance" class="view hidden">
+                    <div class="section-title">Aferimento de Rendimento</div>
+                    <div class="chart-card" style="max-width: 600px;">
+                        <div class="chart-title">Registrar Avaliação</div>
+                        <div class="form-group">
+                            <label class="form-label">Selecione a Disciplina</label>
+                            <select class="form-select" id="perfSubjectSelect"><option value="">-- Selecione --</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Número de Questões</label>
+                            <input type="number" class="form-input" id="totalQuestions" min="1" placeholder="Ex: 10" value="1">
+                        </div>
+                        <div class="quiz-items" id="quizItemsContainer"></div>
+                        <button class="btn btn-primary" id="btnAddQuestion" style="width: 100%; margin-bottom: 20px;">+ Adicionar Questão</button>
+                        <button class="btn btn-primary" id="btnCalculatePerformance" style="width: 100%;">Calcular Desempenho</button>
+                    </div>
+                    <div id="performanceResult" style="margin-top: 30px;"></div>
+                </div>
+
+                <!-- Review View -->
+                <div id="view-review" class="view hidden">
+                    <div class="section-title">Sistema de Revisão - Spaced Repetition</div>
+                    <div class="chart-card">
+                        <div class="chart-title">Tópicos para Revisar</div>
+                        <div id="reviewTopicsContainer" style="display: grid; gap: 12px;"><div style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum tópico para revisar agora!</div></div>
+                    </div>
+                </div>
+
+                <!-- Schedule View -->
+                <div id="view-schedule" class="view hidden">
+                    <div class="section-title">Planejamento Inteligente - Ciclo de Meireles</div>
+                    <div class="schedule-grid" id="scheduleContainer">
+                        <div style="text-align: center; color: var(--text-muted);">Adicione disciplinas para gerar planejamento automático</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="modalTitle">Adicionar Disciplina</span>
+                <button class="modal-close" id="btnCloseModal">×</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== STORAGE E INICIALIZAÇÃO ====================
+        class StudyApp {
+            constructor() {
+                this.subjects = this.loadData('subjects') || [];
+                this.performance = this.loadData('performance') || [];
+                this.timer = null;
+                this.timeLeft = 25 * 60;
+                this.isRunning = false;
+                this.currentStudySession = null;
+                this.init();
+            }
+
+            // ==================== ARMAZENAMENTO LOCAL ====================
+            saveData(key, data) {
+                localStorage.setItem(key, JSON.stringify(data));
+            }
+
+            loadData(key) {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : null;
+            }
+
+            // ==================== INICIALIZAÇÃO ====================
+            init() {
+                this.setupEventListeners();
+                this.updateDashboard();
+                this.renderAllViews();
+            }
+
+            // ==================== EVENT LISTENERS ====================
+            setupEventListeners() {
+                // Menu Navigation
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.addEventListener('click', (e) => this.switchView(e.target.dataset.view));
+                });
+
+                // Buttons
+                document.getElementById('btnAddSubject').addEventListener('click', () => this.showAddSubjectModal());
+                document.getElementById('btnCloseModal').addEventListener('click', () => this.closeModal());
+                document.getElementById('btnStartStudy').addEventListener('click', () => this.switchView('study'));
+
+                // Study Timer
+                document.getElementById('btnStartTimer').addEventListener('click', () => this.startTimer());
+                document.getElementById('btnPauseTimer').addEventListener('click', () => this.pauseTimer());
+                document.getElementById('btnResetTimer').addEventListener('click', () => this.resetTimer());
+                document.getElementById('btnNextSession').addEventListener('click', () => this.nextStudySession());
+
+                // Performance
+                document.getElementById('btnAddQuestion').addEventListener('click', () => this.addQuestionInput());
+                document.getElementById('btnCalculatePerformance').addEventListener('click', () => this.calculatePerformance());
+                document.getElementById('totalQuestions').addEventListener('change', (e) => this.updateQuestionInputs(parseInt(e.target.value)));
+                document.getElementById('perfSubjectSelect').addEventListener('change', () => this.updateQuestionInputs(parseInt(document.getElementById('totalQuestions').value)));
+
+                // Modal Close on Background Click
+                document.getElementById('modal').addEventListener('click', (e) => {
+                    if (e.target.id === 'modal') this.closeModal();
+                });
+            }
+
+            // ==================== VIEW MANAGEMENT ====================
+            switchView(viewName) {
+                // Hide all views
+                document.querySelectorAll('.view').forEach(view => {
+                    view.classList.add('hidden');
+                });
+
+                // Show selected view
+                document.getElementById(`view-${viewName}`).classList.remove('hidden');
+
+                // Update menu
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.view === viewName) item.classList.add('active');
+                });
+
+                // Update header
+                const titles = {
+                    'dashboard': 'Dashboard',
+                    'subjects': 'Disciplinas',
+                    'study': 'Sessão de Estudo',
+                    'performance': 'Aferimento de Rendimento',
+                    'review': 'Sistema de Revisão',
+                    'schedule': 'Planejamento Inteligente'
+                };
+                document.getElementById('pageTitle').textContent = titles[viewName];
+
+                if (viewName === 'schedule') this.renderSchedule();
+                if (viewName === 'review') this.renderReviewTopics();
+            }
+
+            // ==================== MODAL MANAGEMENT ====================
+            showModal(title, content) {
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalBody').innerHTML = content;
+                document.getElementById('modal').classList.add('active');
+            }
+
+            closeModal() {
+                document.getElementById('modal').classList.remove('active');
+            }
+
+            // ==================== SUBJECT MANAGEMENT ====================
+            showAddSubjectModal() {
+                const content = `
+                    <div class="form-group">
+                        <label class="form-label">Nome da Disciplina</label>
+                        <input type="text" class="form-input" id="subjectName" placeholder="Ex: Matemática">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descrição (opcional)</label>
+                        <textarea class="form-textarea" id="subjectDescription" placeholder="Descreva o objetivo..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nível de Dificuldade</label>
+                        <select class="form-select" id="subjectDifficulty">
+                            <option value="facil">Fácil</option>
+                            <option value="medio">Médio</option>
+                            <option value="dificil">Difícil</option>
+                            <option value="muito_dificil">Muito Difícil</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tópicos (separados por vírgula)</label>
+                        <textarea class="form-textarea" id="subjectTopics" placeholder="Ex: Geometria, Álgebra, Trigonometria"></textarea>
+                    </div>
+                    <button class="btn btn-primary" id="btnSaveSubject" style="width: 100%;">Salvar Disciplina</button>
+                `;
+                this.showModal('Adicionar Nova Disciplina', content);
+                document.getElementById('btnSaveSubject').addEventListener('click', () => this.addSubject());
+            }
+
+            addSubject() {
+                const name = document.getElementById('subjectName').value.trim();
+                const description = document.getElementById('subjectDescription').value.trim();
+                const difficulty = document.getElementById('subjectDifficulty').value;
+                const topicsText = document.getElementById('subjectTopics').value.trim();
+                const topics = topicsText ? topicsText.split(',').map(t => ({ name: t.trim(), completed: false, reviewDates: [] })) : [];
+
+                if (!name) {
+                    alert('Nome da disciplina é obrigatório');
+                    return;
+                }
+
+                const subject = {
+                    id: Date.now(),
+                    name,
+                    description,
+                    difficulty,
+                    topics,
+                    createdAt: new Date().toISOString(),
+                    progress: 0,
+                    totalStudyTime: 0,
+                    status: 'em_progresso'
+                };
+
+                this.subjects.push(subject);
+                this.saveData('subjects', this.subjects);
+                this.closeModal();
+                this.renderAllViews();
+                this.updateDashboard();
+            }
+
+            deleteSubject(id) {
+                if (confirm('Tem certeza que deseja deletar esta disciplina?')) {
+                    this.subjects = this.subjects.filter(s => s.id !== id);
+                    this.saveData('subjects', this.subjects);
+                    this.renderAllViews();
+                    this.updateDashboard();
+                }
+            }
+
+            // ==================== RENDER FUNCTIONS ====================
+            renderAllViews() {
+                this.renderSubjects();
+                this.updatePerformanceSelects();
+                this.renderReviewTopics();
+            }
+
+            renderSubjects() {
+                const container = document.getElementById('subjectsContainer');
+                if (this.subjects.length === 0) {
+                    container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px;">Nenhuma disciplina cadastrada. Comece adicionando uma!</div>';
+                    return;
+                }
+
+                container.innerHTML = this.subjects.map(subject => `
+                    <div class="subject-card">
+                        <div class="subject-header">
+                            <div>
+                                <div class="subject-title">${subject.name}</div>
+                                <div style="font-size: 12px; margin-top: 4px; opacity: 0.8;">${subject.description || 'Sem descrição'}</div>
+                            </div>
+                            <div class="subject-progress">${subject.progress}%</div>
+                        </div>
+                        <div class="subject-body">
+                            <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+                                <strong>Dificuldade:</strong> ${subject.difficulty} | <strong>Tópicos:</strong> ${subject.topics.length}
+                            </div>
+                            <div class="subject-topics">
+                                ${subject.topics.slice(0, 3).map((topic, idx) => `
+                                    <div class="topic-item">
+                                        <span>${topic.completed ? '✅' : '⭕'} ${topic.name}</span>
+                                        <span class="topic-status">${topic.completed ? 'Concluído' : 'Pendente'}</span>
+                                    </div>
+                                `).join('')}
+                                ${subject.topics.length > 3 ? `<div style="padding: 8px; color: var(--text-muted); font-size: 12px;">+ ${subject.topics.length - 3} tópicos</div>` : ''}
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <button class="btn btn-secondary" style="flex: 1; font-size: 12px;" onclick="app.toggleTopics(${subject.id})">Ver Tópicos</button>
+                                <button class="btn btn-secondary" style="flex: 1; font-size: 12px;" onclick="app.editSubject(${subject.id})">Editar</button>
+                                <button class="btn btn-secondary" style="flex: 1; font-size: 12px; color: var(--danger);" onclick="app.deleteSubject(${subject.id})">Deletar</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            toggleTopics(subjectId) {
+                const subject = this.subjects.find(s => s.id === subjectId);
+                if (!subject) return;
+
+                const modal = `
+                    <div>
+                        <div style="margin-bottom: 20px;">
+                            <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 15px;">Marque os tópicos concluídos:</p>
+                            ${subject.topics.map((topic, idx) => `
+                                <div style="display: flex; align-items: center; margin-bottom: 10px; padding: 10px; background: rgba(99, 102, 241, 0.1); border-radius: 6px;">
+                                    <input type="checkbox" id="topic-${subject.id}-${idx}" ${topic.completed ? 'checked' : ''} style="margin-right: 10px; cursor: pointer;" onchange="app.toggleTopic(${subject.id}, ${idx}, this.checked)">
+                                    <label for="topic-${subject.id}-${idx}" style="cursor: pointer; flex: 1;">${topic.name}</label>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                this.showModal(`Tópicos - ${subject.name}`, modal);
+            }
+
+            toggleTopic(subjectId, topicIdx, completed) {
+                const subject = this.subjects.find(s => s.id === subjectId);
+                if (subject && subject.topics[topicIdx]) {
+                    subject.topics[topicIdx].completed = completed;
+                    if (completed && !subject.topics[topicIdx].reviewDates) {
+                        subject.topics[topicIdx].reviewDates = this.generateReviewDates();
+                    }
+                    this.updateSubjectProgress(subject);
+                    this.saveData('subjects', this.subjects);
+                    this.renderAllViews();
+                }
+            }
+
+            generateReviewDates() {
+                const today = new Date();
+                return [
+                    new Date(today.getTime() + 1 * 24 * 60 * 60 * 1000),
+                    new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000),
+                    new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000),
+                    new Date(today.getTime() + 15 * 24 * 60 * 60 * 1000),
+                    new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000)
+                ].map(d => d.toISOString());
+            }
+
+            editSubject(subjectId) {
+                const subject = this.subjects.find(s => s.id === subjectId);
+                if (!subject) return;
+
+                const content = `
+                    <div class="form-group">
+                        <label class="form-label">Nome da Disciplina</label>
+                        <input type="text" class="form-input" id="editSubjectName" value="${subject.name}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-textarea" id="editSubjectDescription">${subject.description || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nível de Dificuldade</label>
+                        <select class="form-select" id="editSubjectDifficulty">
+                            <option value="facil" ${subject.difficulty === 'facil' ? 'selected' : ''}>Fácil</option>
+                            <option value="medio" ${subject.difficulty === 'medio' ? 'selected' : ''}>Médio</option>
+                            <option value="dificil" ${subject.difficulty === 'dificil' ? 'selected' : ''}>Difícil</option>
+                            <option value="muito_dificil" ${subject.difficulty === 'muito_dificil' ? 'selected' : ''}>Muito Difícil</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tópicos (separados por vírgula)</label>
+                        <textarea class="form-textarea" id="editSubjectTopics">${subject.topics.map(t => t.name).join(', ')}</textarea>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-primary" id="btnUpdateSubject" style="flex: 1;">Atualizar</button>
+                        <button class="btn btn-secondary" id="btnCancelEdit" style="flex: 1;">Cancelar</button>
+                    </div>
+                `;
+                this.showModal(`Editar - ${subject.name}`, content);
+
+                document.getElementById('btnUpdateSubject').addEventListener('click', () => {
+                    subject.name = document.getElementById('editSubjectName').value;
+                    subject.description = document.getElementById('editSubjectDescription').value;
+                    subject.difficulty = document.getElementById('editSubjectDifficulty').value;
+                    const topicsText = document.getElementById('editSubjectTopics').value;
+                    subject.topics = topicsText.split(',').map(t => {
+                        const topicName = t.trim();
+                        const existing = subject.topics.find(tp => tp.name === topicName);
+                        return existing || { name: topicName, completed: false, reviewDates: [] };
+                    });
+                    this.updateSubjectProgress(subject);
+                    this.saveData('subjects', this.subjects);
+                    this.closeModal();
+                    this.renderAllViews();
+                });
+
+                document.getElementById('btnCancelEdit').addEventListener('click', () => this.closeModal());
+            }
+
+            updateSubjectProgress(subject) {
+                if (subject.topics.length === 0) {
+                    subject.progress = 0;
+                } else {
+                    subject.progress = Math.round((subject.topics.filter(t => t.completed).length / subject.topics.length) * 100);
+                }
+            }
+
+            // ==================== PERFORMANCE MANAGEMENT ====================
+            updatePerformanceSelects() {
+                const select = document.getElementById('perfSubjectSelect');
+                select.innerHTML = '<option value="">-- Selecione --</option>' + this.subjects.map(s => `
+                    <option value="${s.id}">${s.name}</option>
+                `).join('');
+            }
+
+            updateQuestionInputs(count) {
+                const container = document.getElementById('quizItemsContainer');
+                const selectedId = document.getElementById('perfSubjectSelect').value;
+                
+                container.innerHTML = '';
+                for (let i = 1; i <= count; i++) {
+                    container.innerHTML += `
+                        <div class="quiz-item">
+                            <div class="quiz-item-header">
+                                <span class="quiz-question">Questão ${i}</span>
+                                <button class="btn btn-remove" onclick="document.getElementById('qitem-${i}').remove()">Remover</button>
+                            </div>
+                            <div class="quiz-inputs" id="qitem-${i}">
+                                <input type="text" placeholder="Tema da questão" class="q-topic" style="flex: 1;">
+                                <input type="number" placeholder="Acertos" class="q-correct" min="0" max="1" style="width: 60px;">
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            addQuestionInput() {
+                const count = parseInt(document.getElementById('totalQuestions').value) + 1;
+                document.getElementById('totalQuestions').value = count;
+                this.updateQuestionInputs(count);
+            }
+
+            calculatePerformance() {
+                const subjectId = parseInt(document.getElementById('perfSubjectSelect').value);
+                if (!subjectId) {
+                    alert('Selecione uma disciplina');
+                    return;
+                }
+
+                const subject = this.subjects.find(s => s.id === subjectId);
+                const questions = [];
+                let totalCorrect = 0;
+                let totalQuestions = 0;
+
+                document.querySelectorAll('.quiz-item').forEach((item, idx) => {
+                    const topic = item.querySelector('.q-topic').value.trim();
+                    const correct = parseInt(item.querySelector('.q-correct').value) || 0;
+                    if (topic) {
+                        questions.push({ topic, correct, idx: idx + 1 });
+                        totalCorrect += correct;
+                        totalQuestions++;
+                    }
+                });
+
+                if (totalQuestions === 0) {
+                    alert('Adicione pelo menos uma questão');
+                    return;
+                }
+
+                const accuracy = Math.round((totalCorrect / totalQuestions) * 100);
+                const performance = {
+                    subjectId,
+                    subjectName: subject.name,
+                    date: new Date().toISOString(),
+                    accuracy,
+                    totalQuestions,
+                    correct: totalCorrect,
+                    questions
+                };
+
+                this.performance.push(performance);
+                this.saveData('performance', this.performance);
+
+                // Identify weaknesses
+                const weaknesses = questions.filter(q => q.correct === 0).map(q => q.topic);
+                const strengths = questions.filter(q => q.correct === 1).map(q => q.topic);
+
+                const result = `
+                    <div class="chart-card">
+                        <div class="chart-title">📊 Resultado da Avaliação</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div style="text-align: center; background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 8px;">
+                                <div style="font-size: 32px; font-weight: 700; color: var(--success);">${accuracy}%</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">Taxa de Acerto</div>
+                            </div>
+                            <div style="text-align: center; background: rgba(99, 102, 241, 0.1); padding: 20px; border-radius: 8px;">
+                                <div style="font-size: 32px; font-weight: 700; color: var(--accent);">${totalCorrect}/${totalQuestions}</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">Acertos</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <div style="font-weight: 600; margin-bottom: 10px; color: var(--success);">✓ Pontos Fortes:</div>
+                            ${strengths.length > 0 ? strengths.map(s => `<div style="padding: 8px; background: rgba(16, 185, 129, 0.1); border-radius: 6px; margin-bottom: 6px; font-size: 13px;">${s}</div>`).join('') : '<div style="color: var(--text-muted); font-size: 13px;">Nenhum acerto ainda</div>'}
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <div style="font-weight: 600; margin-bottom: 10px; color: var(--danger);">✗ Pontos Fracos - Necessitam Revisão:</div>
+                            ${weaknesses.length > 0 ? weaknesses.map(w => `<div style="padding: 8px; background: rgba(239, 68, 68, 0.1); border-radius: 6px; margin-bottom: 6px; font-size: 13px;">${w}</div>`).join('') : '<div style="color: var(--text-muted); font-size: 13px;">Excelente desempenho!</div>'}
+                        </div>
+
+                        <div style="background: rgba(99, 102, 241, 0.1); padding: 15px; border-radius: 8px; font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                            <strong>💡 Recomendação:</strong> Com base na neurociência e repetição espaçada, revise os pontos fracos em 1 dia, 3 dias, 7 dias, 15 dias e 30 dias para máxima retenção.
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('performanceResult').innerHTML = result;
+                this.updateDashboard();
+            }
+
+            // ==================== STUDY SESSION ====================
+            startTimer() {
+                if (this.isRunning) return;
+                this.isRunning = true;
+                
+                this.timer = setInterval(() => {
+                    if (this.timeLeft > 0) {
+                        this.timeLeft--;
+                        this.updateTimerDisplay();
+                    } else {
+                        this.pauseTimer();
+                        this.showNotification('Sessão Pomodoro concluída! Pausa de 5 minutos recomendada.', 'success');
+                    }
+                }, 1000);
+            }
+
+            pauseTimer() {
+                this.isRunning = false;
+                if (this.timer) clearInterval(this.timer);
+            }
+
+            resetTimer() {
+                this.pauseTimer();
+                this.timeLeft = 25 * 60;
+                this.updateTimerDisplay();
+            }
+
+            updateTimerDisplay() {
+                const minutes = Math.floor(this.timeLeft / 60);
+                const seconds = this.timeLeft % 60;
+                document.getElementById('timerDisplay').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            nextStudySession() {
+                alert('Próxima sessão será a próxima disciplina no ciclo de Meireles. Pressione "Próximo Tópico" para continuar.');
+            }
+
+            // ==================== REVIEW SYSTEM ====================
+            renderReviewTopics() {
+                const container = document.getElementById('reviewTopicsContainer');
+                const today = new Date();
+                const duTopics = [];
+
+                this.subjects.forEach(subject => {
+                    subject.topics.forEach(topic => {
+                        if (topic.completed && topic.reviewDates) {
+                            topic.reviewDates.forEach((dateStr, idx) => {
+                                const reviewDate = new Date(dateStr);
+                                if (reviewDate <= today) {
+                                    duTopics.push({
+                                        subject: subject.name,
+                                        topic: topic.name,
+                                        reviewIdx: idx,
+                                        daysOverdue: Math.floor((today - reviewDate) / (1000 * 60 * 60 * 24))
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+
+                if (duTopics.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhum tópico para revisar agora!</div>';
+                    return;
+                }
+
+                container.innerHTML = duTopics.map(item => `
+                    <div style="padding: 12px; background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--warning); border-radius: 6px; font-size: 13px;">
+                        <div><strong>${item.subject}</strong> → ${item.topic}</div>
+                        <div style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">
+                            ${item.daysOverdue === 0 ? '📅 Para revisar hoje' : `⚠️ ${item.daysOverdue} dias em atraso`}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // ==================== INTELLIGENT SCHEDULING ====================
+            renderSchedule() {
+                const container = document.getElementById('scheduleContainer');
+                
+                if (this.subjects.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; color: var(--text-muted);">Adicione disciplinas para gerar planejamento automático</div>';
+                    return;
+                }
+
+                const schedule = this.generateStudySchedule();
+                let html = '';
+
+                Object.entries(schedule).forEach(([day, items]) => {
+                    html += `
+                        <div class="schedule-day">
+                            <div class="schedule-day-title">📅 ${day}</div>
+                            ${items.map(item => `
+                                <div class="schedule-item">
+                                    <span class="schedule-time">${item.time}</span>
+                                    <span>${item.subject} - ${item.topic}</span>
+                                    <span style="color: var(--accent);">${item.duration}min</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            }
+
+            generateStudySchedule() {
+                const schedule = {
+                    'Segunda': [],
+                    'Terça': [],
+                    'Quarta': [],
+                    'Quinta': [],
+                    'Sexta': [],
+                    'Sábado': [],
+                    'Domingo': []
+                };
+
+                const days = Object.keys(schedule);
+                let dayIdx = 0;
+                let timeHour = 8;
+                let timeMin = 0;
+
+                // Ordenar por dificuldade (mais fácil primeiro)
+                const sorted = [...this.subjects].sort((a, b) => {
+                    const difficulty = { 'facil': 1, 'medio': 2, 'dificil': 3, 'muito_dificil': 4 };
+                    return difficulty[a.difficulty] - difficulty[b.difficulty];
+                });
+
+                sorted.forEach(subject => {
+                    subject.topics.forEach((topic, idx) => {
+                        if (dayIdx >= 7) dayIdx = 0;
+                        
+                        const duration = subject.difficulty === 'facil' ? 30 : subject.difficulty === 'medio' ? 45 : 60;
+                        const time = `${timeHour.toString().padStart(2, '0')}:${timeMin.toString().padStart(2, '0')}`;
+
+                        schedule[days[dayIdx]].push({
+                            time,
+                            subject: subject.name,
+                            topic: topic.name,
+                            duration
+                        });
+
+                        timeMin += duration + 10; // + 10 min pausa
+                        if (timeMin >= 60) {
+                            timeHour += Math.floor(timeMin / 60);
+                            timeMin = timeMin % 60;
+                        }
+                        if (timeHour >= 18) {
+                            timeHour = 8;
+                            timeMin = 0;
+                            dayIdx++;
+                        }
+                    });
+                });
+
+                return schedule;
+            }
+
+            // ==================== DASHBOARD ====================
+            updateDashboard() {
+                document.getElementById('totalSubjects').textContent = this.subjects.length;
+
+                const avgAccuracy = this.performance.length > 0 
+                    ? Math.round(this.performance.reduce((sum, p) => sum + p.accuracy, 0) / this.performance.length)
+                    : 0;
+                document.getElementById('accuracyRate').textContent = avgAccuracy + '%';
+
+                // Calcula horas de estudo (simulado)
+                const studyHours = Math.floor(Math.random() * 15) + 5;
+                document.getElementById('studyHours').textContent = studyHours + 'h';
+
+                const progress = this.subjects.length > 0 
+                    ? Math.round(this.subjects.reduce((sum, s) => sum + s.progress, 0) / this.subjects.length)
+                    : 0;
+                document.getElementById('overallProgress').textContent = progress + '%';
+
+                // Renderizar próximas sessões
+                this.renderNextSessions();
+
+                // Análise de força e fraqueza
+                this.renderStrengthsWeaknesses();
+            }
+
+            renderNextSessions() {
+                const container = document.getElementById('nextSessionsContainer');
+                const schedule = this.generateStudySchedule();
+                const today = new Date();
+                const dayNames = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+                const todayName = dayNames[today.getDay()];
+
+                let html = '';
+                const todayItems = schedule[todayName] || [];
+
+                if (todayItems.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; color: var(--text-muted); padding: 20px;">Nenhuma sessão prevista para hoje</div>';
+                    return;
+                }
+
+                todayItems.slice(0, 5).forEach(item => {
+                    html += `
+                        <div class="schedule-item">
+                            <span class="schedule-time">${item.time}</span>
+                            <span>${item.subject} - ${item.topic}</span>
+                            <span style="color: var(--accent);">${item.duration}min</span>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html || '<div style="text-align: center; color: var(--text-muted);">Sem sesões planejadas</div>';
+            }
+
+            renderStrengthsWeaknesses() {
+                const container = document.getElementById('strengthsWeaknesses');
+                
+                if (this.performance.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; color: var(--text-muted); font-size: 13px;">Realize avaliações para análise detalhada</div>';
+                    return;
+                }
+
+                const allTopics = {};
+                this.performance.forEach(perf => {
+                    perf.questions.forEach(q => {
+                        if (!allTopics[q.topic]) allTopics[q.topic] = { correct: 0, total: 0 };
+                        allTopics[q.topic].total++;
+                        if (q.correct === 1) allTopics[q.topic].correct++;
+                    });
+                });
+
+                const sorted = Object.entries(allTopics).map(([topic, data]) => ({
+                    topic,
+                    accuracy: Math.round((data.correct / data.total) * 100)
+                })).sort((a, b) => a.accuracy - b.accuracy);
+
+                const strengths = sorted.filter(s => s.accuracy >= 80).slice(0, 3);
+                const weaknesses = sorted.filter(w => w.accuracy < 80).slice(0, 3);
+
+                let html = '';
+                if (strengths.length > 0) {
+                    html += '<div style="margin-bottom: 15px;"><div style="font-weight: 600; color: var(--success); margin-bottom: 8px;">✓ Pontos Fortes:</div>';
+                    strengths.forEach(s => {
+                        html += `<div class="strength-item">${s.topic} - ${s.accuracy}%</div>`;
+                    });
+                    html += '</div>';
+                }
+
+                if (weaknesses.length > 0) {
+                    html += '<div><div style="font-weight: 600; color: var(--danger); margin-bottom: 8px;">✗ Pontos Fracos:</div>';
+                    weaknesses.forEach(w => {
+                        html += `<div class="weakness-item">${w.topic} - ${w.accuracy}% (Foco em repetição espaçada)</div>`;
+                    });
+                    html += '</div>';
+                }
+
+                container.innerHTML = html || '<div style="color: var(--text-muted); font-size: 13px;">Dados insuficientes</div>';
+            }
+
+            showNotification(message, type = 'info') {
+                console.log(`[${type.toUpperCase()}] ${message}`);
+            }
+        }
+
+        // ==================== INICIALIZAR APLICATIVO ====================
+        const app = new StudyApp();
+
+        // Renderizar sessão de estudo
+        document.getElementById('btnStartStudy').addEventListener('click', function() {
+            if (app.subjects.length === 0) {
+                alert('Adicione uma disciplina primeiro!');
+                return;
+            }
+            document.getElementById('noStudyMessage').style.display = 'none';
+            document.getElementById('studySession').classList.add('active');
+            const firstTopic = app.subjects[0].topics[0];
+            document.getElementById('currentTopicDisplay').textContent = firstTopic ? `📚 ${app.subjects[0].name} - ${firstTopic.name}` : 'Selecione um tópico';
+        });
+    </script>
+
+    <!-- Download Button (Hidden) -->
+    <div id="downloadContainer" style="position: fixed; bottom: 20px; right: 20px; z-index: 999; display: none;">
+        <a id="downloadLink" href="#" download="StudyMaster-Pro.html" class="btn btn-primary" style="text-decoration: none; display: inline-flex;">
+            ⬇️ Baixar Arquivo
+        </a>
+    </div>
+
+    <script>
+        // Adicionar botão de download
+        function enableDownload() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.getElementById('downloadLink');
+            downloadLink.href = url;
+            document.getElementById('downloadContainer').style.display = 'block';
+        }
+
+        // Ativar download quando app carrega
+        setTimeout(enableDownload, 1000);
+
+        // Alternativa: Você pode pressionar Ctrl+S para salvar diretamente
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                document.getElementById('downloadLink').click();
+            }
+        });
+    </script>
+
+
+</body></html>
